@@ -1,0 +1,32 @@
+Hallo Florian,
+
+dein Pflichtenheft ist soweit in Ordnung, allerdings bitte ich dich, vor
+der finalen Abgabe noch folgende Punkte zu überarbeiten:
+
+MUSS-Kriterien: Die Funktion, dass Sets auch bearbeitbar sein sollen,
+ist aktuell nicht enthalten. Bitte füge diese Anforderung zu den
+MUSS-Kriterien hinzu.
+
+Tabellen der Use-Cases: Überarbeite die Tabellen der Use-Cases und
+beschreibe drei zentrale Use-Cases ausführlich mit einer vollständigen
+Tabelle.
+
+ER-Diagramm:
+Überdenke den Nutzen der Entität "Inventar". Ist diese Entität
+notwendig, oder könnte ihre Funktion in anderen Entitäten besser
+abgebildet werden?
+Betrachte eine mögliche n:n-Beziehung zwischen "Benutzer" und
+"API-Daten" (vielleicht ist "Set" der bessere Begriff). Der aktuelle
+Stand erlaubt es nicht, dass ein Nutzer mehrere Sets besitzt. Bitte
+überarbeite diesen Punkt, sodass die Beziehung korrekt dargestellt wird.
+
+Viele Grüße
+David Schuler
+
+
+On 22.01.2025 18:02, Florian Fritz wrote:
+> Hallo Herr Schuler
+> Im Anhang finden sie mein Pflichten- und Lastenheft. Ich hoffe, es ist
+> alles in Ordnung. Wenn etwas fehlt, sagen Sie mir bitte Bescheid.
+> Liebe Grüße
+> Florian Fritz
