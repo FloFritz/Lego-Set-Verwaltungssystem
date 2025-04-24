@@ -13,6 +13,7 @@ namespace Lego_Set_Verwaltungssytem.Models
         public string Benutzername { get; set; }
         public string Email { get; set; }
         public string PasswortHash { get; set; }
+        public string Sicherheitscode { get; set; } = string.Empty;
 
         public ICollection<BenutzerSet> BenutzerSets { get; set; } = new List<BenutzerSet>();
     }

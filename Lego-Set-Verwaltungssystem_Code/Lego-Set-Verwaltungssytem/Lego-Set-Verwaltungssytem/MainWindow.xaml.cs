@@ -13,21 +13,26 @@ using Lego_Set_Verwaltungssytem.Views;
 
 namespace Lego_Set_Verwaltungssytem
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
-            // Datenbank automatisch erstellen, falls sie nicht existiert
+            // Datenbank erstellen, falls sie noch nicht existiert
             var db = new AppDbContext();
             db.EnsureDatabase();
 
-
             InitializeComponent();
-            // Starte mit HomePage
             MainFrame.Navigate(new HomePage());
+
+            // Benutzer anzeigen, wenn bereits eingeloggt (z.B. nach erfolgreichem Login)
+            if (App.Current.Properties.Contains("BenutzerName"))
+            {
+                string name = App.Current.Properties["BenutzerName"]?.ToString() ?? "Unbekannt";
+                txtBenutzerInfo.Text = $"Angemeldet als: {name}";
+                txtBenutzerInfo.Visibility = Visibility.Visible;
+                btnLogin.Visibility = Visibility.Collapsed;
+                btnLogout.Visibility = Visibility.Visible;
+            }
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
@@ -43,6 +48,38 @@ namespace Lego_Set_Verwaltungssytem
         private void NavigateAlbumSuche(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new SetSuchePage());
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            bool? result = loginWindow.ShowDialog();
+
+            if (result == true)
+            {
+                string name = App.Current.Properties["BenutzerName"]?.ToString() ?? "Unbekannt";
+                txtBenutzerInfo.Text = $"Angemeldet als: {name}";
+                txtBenutzerInfo.Visibility = Visibility.Visible;
+                btnLogin.Visibility = Visibility.Collapsed;
+                btnLogout.Visibility = Visibility.Visible;
+
+                MessageBox.Show($"Willkommen, {name}!");
+            }
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Benutzer abmelden
+            App.Current.Properties.Remove("BenutzerId");
+            App.Current.Properties.Remove("BenutzerName");
+
+            txtBenutzerInfo.Text = "";
+            txtBenutzerInfo.Visibility = Visibility.Collapsed;
+
+            btnLogin.Visibility = Visibility.Visible;
+            btnLogout.Visibility = Visibility.Collapsed;
+
+            MessageBox.Show("Du wurdest erfolgreich abgemeldet.");
         }
     }
 }

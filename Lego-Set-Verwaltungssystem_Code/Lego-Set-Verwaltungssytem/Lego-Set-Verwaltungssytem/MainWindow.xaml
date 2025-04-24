@@ -14,9 +14,13 @@
 
         <!-- Navigation oben -->
         <Grid Background="Black" Height="50" Grid.Row="0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-                <!-- Startsteite -->
+            <!-- Linke Seite -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Column="0">
                 <Button Content="Home"
                      Foreground="White"
                      Background="Transparent"
@@ -24,7 +28,6 @@
                      Padding="10"
                      Click="HomeButton_Click"/>
 
-                <!-- Sammlung -->
                 <Button Content="Sammlung"
                      Foreground="White"
                      Background="Transparent"
@@ -32,18 +35,46 @@
                      Padding="10"
                      Click="SammlungButton_Click"/>
 
-                <!-- LegoSetSuche -->
                 <Button Content="LegoSet suchen"
                      Foreground="White"
                      Background="Black"
                      BorderThickness="0"
+                     Padding="10"
                      Click="NavigateAlbumSuche"/>
+            </StackPanel>
+
+            <!-- Rechte Seite (Login) -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock x:Name="txtBenutzerInfo"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Margin="0 0 10 0"
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed"/>
+
+                <Button Content="Abmelden"
+                    x:Name="btnLogout"
+                    Foreground="White"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Padding="10"
+                    Click="LogoutButton_Click"
+                    Visibility="Collapsed"/>
+
+                <Button Content="Login"
+                    x:Name="btnLogin"
+                    Foreground="White"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Padding="10"
+                    Click="LoginButton_Click"/>
+
             </StackPanel>
         </Grid>
 
         <!-- Frame -->
         <Frame x:Name="MainFrame"
-            Grid.Row="1"
-            NavigationUIVisibility="Hidden"/>
+               Grid.Row="1"
+               NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>
