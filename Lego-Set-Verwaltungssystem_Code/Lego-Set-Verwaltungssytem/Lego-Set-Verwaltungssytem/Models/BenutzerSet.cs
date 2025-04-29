@@ -10,7 +10,7 @@ namespace Lego_Set_Verwaltungssytem.Models
     {
         public int BenutzerId { get; set; }
         public Benutzer Benutzer { get; set; }
-
+        public int Anzahl { get; set; } = 1;
         public int SetId { get; set; }
         public LegoSet Set { get; set; }
 
