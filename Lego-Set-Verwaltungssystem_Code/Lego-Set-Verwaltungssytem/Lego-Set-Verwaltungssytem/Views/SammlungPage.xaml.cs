@@ -12,17 +12,96 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Lego_Set_Verwaltungssytem.Data;
+using Lego_Set_Verwaltungssytem.Models;
 
 namespace Lego_Set_Verwaltungssytem.Views
 {
-    /// <summary>
-    /// Interaktionslogik für SammlungPage.xaml
-    /// </summary>
     public partial class SammlungPage : Page
     {
+        private List<BenutzerSet> benutzerSets = new();
+
         public SammlungPage()
         {
             InitializeComponent();
+            LadeSammlung();
+        }
+
+        // Lädt alle Sets des aktuell eingeloggten Benutzers
+        private void LadeSammlung()
+        {
+            if (App.Current.Properties["BenutzerId"] is int benutzerId)
+            {
+                using (var db = new AppDbContext())
+                {
+                    benutzerSets = db.BenutzerSets
+                        .Where(bs => bs.BenutzerId == benutzerId)
+                        .Select(bs => new BenutzerSet
+                        {
+                            BenutzerSetId = bs.BenutzerSetId,
+                            BenutzerId = bs.BenutzerId,
+                            SetId = bs.SetId,
+                            Anzahl = bs.Anzahl,
+                            GezahlterPreis = bs.GezahlterPreis,
+                            Notizen = bs.Notizen,
+                            Kaufdatum = bs.Kaufdatum,
+                            Set = db.Sets.FirstOrDefault(s => s.SetId == bs.SetId)
+                        })
+                        .ToList();
+                }
+
+                lvSammlung.ItemsSource = null;
+                lvSammlung.ItemsSource = benutzerSets;
+            }
+            else
+            {
+                MessageBox.Show("Bitte zuerst einloggen.");
+            }
+        }
+
+        // Speichert Änderungen an Anzahl, Preis oder Notizen
+        private void BtnSpeichern_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is BenutzerSet selected)
+            {
+                using (var db = new AppDbContext())
+                {
+                    var eintrag = db.BenutzerSets.FirstOrDefault(b => b.BenutzerSetId == selected.BenutzerSetId);
+                    if (eintrag != null)
+                    {
+                        eintrag.Anzahl = selected.Anzahl;
+                        eintrag.GezahlterPreis = selected.GezahlterPreis;
+                        eintrag.Notizen = selected.Notizen;
+                        db.SaveChanges();
+                        MessageBox.Show("Änderungen gespeichert.");
+                    }
+                }
+            }
+        }
+
+        // Löscht einen Eintrag aus der Sammlung
+        private void BtnLoeschen_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is BenutzerSet selected)
+            {
+                var result = MessageBox.Show("Willst du dieses Set wirklich aus deiner Sammlung löschen?", "Löschen bestätigen", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    using (var db = new AppDbContext())
+                    {
+                        var eintrag = db.BenutzerSets.FirstOrDefault(b => b.BenutzerSetId == selected.BenutzerSetId);
+                        if (eintrag != null)
+                        {
+                            db.BenutzerSets.Remove(eintrag);
+                            db.SaveChanges();
+                            MessageBox.Show("Set wurde gelöscht.");
+                        }
+                    }
+
+                    // Ansicht aktualisieren
+                    LadeSammlung();
+                }
+            }
         }
     }
 }

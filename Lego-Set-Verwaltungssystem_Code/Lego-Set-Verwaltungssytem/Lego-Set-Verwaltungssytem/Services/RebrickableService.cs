@@ -13,7 +13,7 @@ namespace Lego_Set_Verwaltungssytem.Services
     public static class RebrickableService
     {
         // API-Zugangsdaten
-        private static readonly string apiKey = "84885acafe6529403f8b6dad4ec61a30";
+        private static readonly string apiKey = "";
         private static readonly HttpClient client = new HttpClient();
 
         // Mapping von Theme-IDs zu Namen
