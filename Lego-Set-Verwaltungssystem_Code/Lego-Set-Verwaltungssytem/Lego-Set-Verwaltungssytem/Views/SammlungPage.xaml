@@ -61,5 +61,15 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        
+        <Button Content="Set manuell hinzufügen"
+        Background="Black"
+        Foreground="White"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom"
+        Margin="0 10 10 10"
+        Padding="10 5"
+        Click="BtnSetManuellHinzufuegen_Click"/>
+
     </Grid>
 </Page>

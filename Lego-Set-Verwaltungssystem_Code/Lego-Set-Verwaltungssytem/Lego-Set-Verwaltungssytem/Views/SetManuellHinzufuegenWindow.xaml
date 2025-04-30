@@ -1,0 +1,45 @@
+﻿<Window x:Class="Lego_Set_Verwaltungssytem.Views.SetManuellHinzufuegenWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lego_Set_Verwaltungssytem.Views"
+        mc:Ignorable="d"
+        Title="SetManuellHinzufuegenWindow" Height="450" Width="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" VerticalAlignment="Top">
+            <Label Content="Setnummer"/>
+            <TextBox x:Name="txtNummer"/>
+
+            <Label Content="Name"/>
+            <TextBox x:Name="txtName"/>
+
+            <Label Content="Thema"/>
+            <TextBox x:Name="txtThema"/>
+
+            <Label Content="Jahr"/>
+            <TextBox x:Name="txtJahr"/>
+
+            <Label Content="Preis"/>
+            <TextBox x:Name="txtPreis"/>
+
+            <Label Content="Anzahl"/>
+            <TextBox x:Name="txtAnzahl"/>
+
+            <Label Content="Notiz"/>
+            <TextBox x:Name="txtNotiz" Height="60" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <Button Grid.Row="1"
+                Content="Speichern"
+                HorizontalAlignment="Right"
+                Margin="0 20 0 0"
+                Padding="10 5"
+                Click="BtnSpeichern_Click"/>
+    </Grid>
+</Window>

@@ -103,5 +103,14 @@ namespace Lego_Set_Verwaltungssytem.Views
                 }
             }
         }
+
+
+        private void BtnSetManuellHinzufuegen_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new SetManuellHinzufuegenWindow();
+            win.ShowDialog();
+            LadeSammlung(); // Liste nach Hinzufügen aktualisieren
+        }
+
     }
 }
