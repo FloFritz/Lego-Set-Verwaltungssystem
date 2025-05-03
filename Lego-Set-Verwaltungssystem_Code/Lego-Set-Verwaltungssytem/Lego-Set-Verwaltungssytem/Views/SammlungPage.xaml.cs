@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Lego_Set_Verwaltungssytem.Data;
 using Lego_Set_Verwaltungssytem.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Lego_Set_Verwaltungssytem.Views
 {
@@ -34,22 +36,14 @@ namespace Lego_Set_Verwaltungssytem.Views
             {
                 using (var db = new AppDbContext())
                 {
+                    // Lade alle BenutzerSets für den eingeloggten Benutzer inklusive zugehörigem Set (mit PreisUVP etc.)
                     benutzerSets = db.BenutzerSets
+                        .Include(bs => bs.Set)
                         .Where(bs => bs.BenutzerId == benutzerId)
-                        .Select(bs => new BenutzerSet
-                        {
-                            BenutzerSetId = bs.BenutzerSetId,
-                            BenutzerId = bs.BenutzerId,
-                            SetId = bs.SetId,
-                            Anzahl = bs.Anzahl,
-                            GezahlterPreis = bs.GezahlterPreis,
-                            Notizen = bs.Notizen,
-                            Kaufdatum = bs.Kaufdatum,
-                            Set = db.Sets.FirstOrDefault(s => s.SetId == bs.SetId)
-                        })
                         .ToList();
                 }
 
+                // Setze die Sammlung in die ListView
                 lvSammlung.ItemsSource = null;
                 lvSammlung.ItemsSource = benutzerSets;
             }
@@ -59,6 +53,7 @@ namespace Lego_Set_Verwaltungssytem.Views
             }
         }
 
+
         // Speichert Änderungen an Anzahl, Preis oder Notizen
         private void BtnSpeichern_Click(object sender, RoutedEventArgs e)
         {
@@ -66,18 +61,30 @@ namespace Lego_Set_Verwaltungssytem.Views
             {
                 using (var db = new AppDbContext())
                 {
-                    var eintrag = db.BenutzerSets.FirstOrDefault(b => b.BenutzerSetId == selected.BenutzerSetId);
-                    if (eintrag != null)
+                    // Hole das BenutzerSet mit zugehörigem Set
+                    var eintrag = db.BenutzerSets
+                        .FirstOrDefault(b => b.BenutzerSetId == selected.BenutzerSetId);
+
+                    var legoSet = db.Sets
+                        .FirstOrDefault(s => s.SetId == selected.SetId);
+
+                    if (eintrag != null && legoSet != null)
                     {
+                        // BenutzerSet aktualisieren
                         eintrag.Anzahl = selected.Anzahl;
                         eintrag.GezahlterPreis = selected.GezahlterPreis;
                         eintrag.Notizen = selected.Notizen;
+
+                        // PreisUVP vom Set aktualisieren
+                        legoSet.PreisUVP = selected.Set.PreisUVP;
+
                         db.SaveChanges();
                         MessageBox.Show("Änderungen gespeichert.");
                     }
                 }
             }
         }
+
 
         // Löscht einen Eintrag aus der Sammlung
         private void BtnLoeschen_Click(object sender, RoutedEventArgs e)
