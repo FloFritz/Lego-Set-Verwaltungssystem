@@ -41,6 +41,14 @@
                      BorderThickness="0"
                      Padding="10"
                      Click="NavigateAlbumSuche"/>
+                
+                <Button Content="Statistiken"
+                     Foreground="White"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Padding="10"
+                     Click="StatistikButton_Click"/>
+
             </StackPanel>
 
             <!-- Rechte Seite (Login) -->

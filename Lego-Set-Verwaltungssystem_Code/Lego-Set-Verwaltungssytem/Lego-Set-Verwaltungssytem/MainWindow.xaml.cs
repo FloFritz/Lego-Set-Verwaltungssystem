@@ -50,6 +50,12 @@ namespace Lego_Set_Verwaltungssytem
             MainFrame.Navigate(new SetSuchePage());
         }
 
+        private void StatistikButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new StatistikenPage());
+        }
+
+
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             LoginWindow loginWindow = new LoginWindow();
