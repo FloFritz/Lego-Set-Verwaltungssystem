@@ -20,6 +20,7 @@ namespace Lego_Set_Verwaltungssytem
             // Datenbank erstellen, falls sie noch nicht existiert
             var db = new AppDbContext();
             db.EnsureDatabase();
+            db.SeedTestdaten();
 
             InitializeComponent();
             MainFrame.Navigate(new HomePage());

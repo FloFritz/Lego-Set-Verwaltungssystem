@@ -1,17 +1,34 @@
 ﻿<Page x:Class="Lego_Set_Verwaltungssytem.Views.StatistikenPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Lego_Set_Verwaltungssytem.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
       Title="StatistikenPage">
 
-    <Grid>
-        <TextBlock Text="Statistiken" 
-           HorizontalAlignment="Center" 
-           VerticalAlignment="Center"
-           FontSize="24"/>
+    <Grid Margin="20">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Width="500">
+
+            <TextBlock Text="Statistiken" FontSize="28" FontWeight="Bold" Margin="0 0 0 20" HorizontalAlignment="Center"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Gesamtanzahl Sets:" FontWeight="Bold" Width="250"/>
+                <TextBlock x:Name="txtGesamtAnzahl"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Gesamtwert bezahlt (€):" FontWeight="Bold" Width="250"/>
+                <TextBlock x:Name="txtGesamtWertBezahlt"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Gesamtwert UVP (€):" FontWeight="Bold" Width="250"/>
+                <TextBlock x:Name="txtGesamtWertUVP"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Differenz UVP vs. Bezahlt (€):" FontWeight="Bold" Width="250"/>
+                <TextBlock x:Name="txtDifferenz"/>
+            </StackPanel>
+
+
+        </StackPanel>
     </Grid>
 </Page>

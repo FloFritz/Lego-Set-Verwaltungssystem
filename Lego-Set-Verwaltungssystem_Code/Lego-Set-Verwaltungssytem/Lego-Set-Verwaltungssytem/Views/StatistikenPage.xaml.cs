@@ -12,17 +12,47 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Lego_Set_Verwaltungssytem.Data;
 
 namespace Lego_Set_Verwaltungssytem.Views
 {
-    /// <summary>
-    /// Interaktionslogik für StatistikenPage.xaml
-    /// </summary>
     public partial class StatistikenPage : Page
     {
         public StatistikenPage()
         {
             InitializeComponent();
+            LadeStatistiken();
+        }
+
+        private void LadeStatistiken()
+        {
+            if (App.Current.Properties["BenutzerId"] is int benutzerId)
+            {
+                using (var db = new AppDbContext())
+                {
+                    var sets = db.BenutzerSets
+                        .Where(bs => bs.BenutzerId == benutzerId)
+                        .Select(bs => new
+                        {
+                            bs.Anzahl,
+                            bs.GezahlterPreis,
+                            UVP = bs.Set.PreisUVP
+                        })
+                        .ToList();
+
+                    int gesamtAnzahl = sets.Sum(s => s.Anzahl);
+                    double gesamtBezahlt = sets.Sum(s => s.Anzahl * s.GezahlterPreis);
+                    double gesamtUVP = sets.Sum(s => s.Anzahl * s.UVP);
+                    double differenz = gesamtUVP - gesamtBezahlt;
+                    
+
+
+                    txtGesamtAnzahl.Text = gesamtAnzahl.ToString();
+                    txtGesamtWertBezahlt.Text = $"{gesamtBezahlt:F2} €";
+                    txtGesamtWertUVP.Text = $"{gesamtUVP:F2} €";
+                    txtDifferenz.Text = $"{differenz:F2} €";
+                }
+            }
         }
     }
 }
