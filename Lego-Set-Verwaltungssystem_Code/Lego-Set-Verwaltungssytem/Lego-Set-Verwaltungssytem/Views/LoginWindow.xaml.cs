@@ -25,8 +25,8 @@ namespace Lego_Set_Verwaltungssytem.Views
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            string benutzername = txtBenutzername.Text;
-            string passwort = txtPasswort.Password;
+            string benutzername = txtBenutzername.Text.Trim();
+            string passwort = txtPasswort.Password.Trim();
             string hash = HashPasswort(passwort);
 
             using (var db = new AppDbContext())

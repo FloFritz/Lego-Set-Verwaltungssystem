@@ -63,7 +63,6 @@ namespace Lego_Set_Verwaltungssytem.Views
                                 MessageBoxImage.Warning);
 
                 this.Close();
-                new LoginWindow().ShowDialog();
                
             }
         }

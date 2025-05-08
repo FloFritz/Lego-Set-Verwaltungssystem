@@ -87,6 +87,7 @@ namespace Lego_Set_Verwaltungssytem
             btnLogout.Visibility = Visibility.Collapsed;
 
             MessageBox.Show("Du wurdest erfolgreich abgemeldet.");
+            MainFrame.Navigate(new HomePage());
         }
     }
 }
