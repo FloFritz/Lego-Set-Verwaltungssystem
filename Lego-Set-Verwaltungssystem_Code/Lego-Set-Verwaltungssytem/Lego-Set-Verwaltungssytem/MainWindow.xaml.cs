@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Lego_Set_Verwaltungssytem.Data;
+using Lego_Set_Verwaltungssytem.Services;
 using Lego_Set_Verwaltungssytem.Views;
 
 namespace Lego_Set_Verwaltungssytem
@@ -17,13 +18,32 @@ namespace Lego_Set_Verwaltungssytem
     {
         public MainWindow()
         {
+            InitializeComponent(); 
+
             // Datenbank erstellen, falls sie noch nicht existiert
             var db = new AppDbContext();
             db.EnsureDatabase();
             db.SeedTestdaten();
 
-            InitializeComponent();
-            MainFrame.Navigate(new HomePage());
+            // API Key prüfen
+            if (string.IsNullOrWhiteSpace(RebrickableService.ApiKey))
+            {
+                var keyWindow = new ApiKeyWindow();
+                var result = keyWindow.ShowDialog();
+
+                if (result == true && !string.IsNullOrWhiteSpace(RebrickableService.ApiKey))
+                {
+                    btnSammlung.IsEnabled = true;
+                    btnSetSuche.IsEnabled = true;
+                    btnStatistiken.IsEnabled = true;
+                }
+                else
+                {
+                    btnSammlung.IsEnabled = false;
+                    btnSetSuche.IsEnabled = false;
+                    btnStatistiken.IsEnabled = false;
+                }
+            }
 
             // Benutzer anzeigen, wenn bereits eingeloggt (z.B. nach erfolgreichem Login)
             if (App.Current.Properties.Contains("BenutzerName"))
@@ -34,7 +54,10 @@ namespace Lego_Set_Verwaltungssytem
                 btnLogin.Visibility = Visibility.Collapsed;
                 btnLogout.Visibility = Visibility.Visible;
             }
+
+            MainFrame.Navigate(new HomePage());
         }
+
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {

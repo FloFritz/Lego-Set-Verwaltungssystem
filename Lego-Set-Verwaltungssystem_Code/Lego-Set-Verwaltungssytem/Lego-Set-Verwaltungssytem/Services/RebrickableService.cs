@@ -6,6 +6,8 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Lego_Set_Verwaltungssytem.Models;
+using System.IO;
+
 
 // Enthält alle Methoden für den Zugriff auf die Rebrickable API
 namespace Lego_Set_Verwaltungssytem.Services
@@ -13,7 +15,17 @@ namespace Lego_Set_Verwaltungssytem.Services
     public static class RebrickableService
     {
         // API-Zugangsdaten
-        private static readonly string apiKey = "";
+        // Statt static readonly nur so:
+        public static string ApiKey => LadeApiKey();
+
+        private static string LadeApiKey()
+        {
+            string path = "api.txt";
+            return File.Exists(path) ? File.ReadAllText(path).Trim() : null;
+        }
+
+        
+
         private static readonly HttpClient client = new HttpClient();
 
         // Mapping von Theme-IDs zu Namen
@@ -23,7 +35,7 @@ namespace Lego_Set_Verwaltungssytem.Services
         static RebrickableService()
         {
             client.BaseAddress = new Uri("https://rebrickable.com/api/v3/lego/");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", apiKey);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", ApiKey);
         }
 
         // Suche nach Sets über die Freitextsuche
