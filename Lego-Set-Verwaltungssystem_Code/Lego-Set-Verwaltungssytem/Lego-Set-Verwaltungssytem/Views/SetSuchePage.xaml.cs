@@ -28,7 +28,9 @@ namespace Lego_Set_Verwaltungssytem.Views
         public SetSuchePage()
         {
             InitializeComponent();
-            LadeThemenInDropdown(); // Themen beim Laden der Seite in das Dropdown einfügen
+            LadeThemenInDropdown();// Themen beim Laden der Seite in das Dropdown einfügen
+            LadeJahreInDropdown();
+            
         }
 
         // Lädt alle Themen aus der API und befüllt das ComboBox-Dropdown
@@ -44,6 +46,24 @@ namespace Lego_Set_Verwaltungssytem.Views
             }
         }
 
+
+        private void LadeJahreInDropdown()
+        {
+            cmbJahr.Items.Clear();
+            cmbJahr.Items.Add("Alle"); // Standard-Auswahl
+
+            int aktuellesJahr = DateTime.Now.Year;
+
+            for (int jahr = aktuellesJahr; jahr >= aktuellesJahr - 30; jahr--)
+            {
+                cmbJahr.Items.Add(jahr.ToString());
+            }
+
+            cmbJahr.SelectedIndex = 0;
+        }
+
+
+
         // Wird aufgerufen, wenn der Benutzer manuell nach einem Set sucht
         private async void BtnSuchen_Click(object sender, RoutedEventArgs e)
         {
@@ -55,39 +75,33 @@ namespace Lego_Set_Verwaltungssytem.Views
             }
 
             string suchtyp = (cmbSuchtyp.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            suchErgebnisse = new List<LegoSet>();
 
-            using (var db = new AppDbContext())
+            // 🔍 Sets suchen (immer über API)
+            suchErgebnisse = suchtyp switch
             {
-                // Lokale Suche je nach Suchtyp
-                if (suchtyp == "Setnummer")
-                {
-                    suchErgebnisse = db.Sets
-                        .Where(s => s.Nummer.ToLower().Contains(suchbegriff.ToLower()))
-                        .ToList();
-                }
-                else if (suchtyp == "Name")
-                {
-                    suchErgebnisse = db.Sets
-                        .Where(s => s.Name.ToLower().Contains(suchbegriff.ToLower()))
-                        .ToList();
-                }
-                else if (suchtyp == "Thema")
-                {
-                    suchErgebnisse = db.Sets
-                        .Where(s => s.Thema.ToLower().Contains(suchbegriff.ToLower()))
-                        .ToList();
-                }
+                "Setnummer" => await RebrickableService.SucheSetsAsync(suchbegriff, "set_num"),
+                "Name" => await RebrickableService.SucheSetsAsync(suchbegriff, "name"),
+                "Thema" => await RebrickableService.SucheSetsAsync(suchbegriff, "theme"),
+                _ => new List<LegoSet>()
+            };
+
+            // 📆 Jahr auslesen
+            string jahrText = cmbJahr.SelectedItem?.ToString();
+            int? filterJahr = (jahrText != "Alle" && int.TryParse(jahrText, out int jahr)) ? jahr : null;
+
+            // 🧹 Jahrfilter anwenden – unabhängig von Datenquelle
+            if (filterJahr != null)
+            {
+                suchErgebnisse = suchErgebnisse
+                    .Where(set => set.Jahr == filterJahr.Value)
+                    .ToList();
             }
 
-            // Wenn nichts gefunden wurde → online in der API suchen
-            if (suchErgebnisse.Count == 0)
-            {
-                suchErgebnisse = await RebrickableService.SucheSetsAsync(suchbegriff, suchtyp);
-            }
-
+            // 📋 Anzeige aktualisieren
             lvErgebnisse.ItemsSource = suchErgebnisse;
         }
+
+
 
 
         // Lädt alle Sets eines bestimmten Themas aus der API und speichert sie lokal

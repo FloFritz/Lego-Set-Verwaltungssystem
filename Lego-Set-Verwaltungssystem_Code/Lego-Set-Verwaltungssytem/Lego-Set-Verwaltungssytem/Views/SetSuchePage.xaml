@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -33,9 +34,19 @@
             <Button Content="Thema vorladen" Click="BtnThemaVorladen_Click"/>
         </StackPanel>
 
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0 0 0 10">
+            <Label>Jahr: </Label>
+            <ComboBox x:Name="cmbJahr"
+                 Width="100"
+                 Margin="10 0 0 0"
+                  SelectedIndex="0"
+                 ToolTip="Optional: Filtert die Ergebnisse auf ein bestimmtes Jahr."/>
+
+        </StackPanel>
+
 
         <!-- Ergebnisliste -->
-        <ListView x:Name="lvErgebnisse" Grid.Row="2">
+        <ListView x:Name="lvErgebnisse" Grid.Row="3">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Setnummer" DisplayMemberBinding="{Binding Nummer}" Width="100"/>

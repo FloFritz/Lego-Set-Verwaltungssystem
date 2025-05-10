@@ -44,6 +44,8 @@ namespace Lego_Set_Verwaltungssytem.Views
                     MessageBox.Show("Falscher Benutzername oder Passwort.");
                 }
             }
+
+            
         }
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
