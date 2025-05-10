@@ -19,10 +19,10 @@
         <ListView x:Name="lvSammlung" Grid.Row="1" Margin="0 10 0 0" AlternationCount="2">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Setnummer" Width="100" DisplayMemberBinding="{Binding Set.Nummer}" />
-                    <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Set.Name}" />
+                    <GridViewColumn Header="Setnummer" Width="80" DisplayMemberBinding="{Binding Set.Nummer}" />
+                    <GridViewColumn Header="Name" Width="180" DisplayMemberBinding="{Binding Set.Name}" />
                     <GridViewColumn Header="Thema" Width="120" DisplayMemberBinding="{Binding Set.Thema}" />
-                    <GridViewColumn Header="Jahr" Width="60" DisplayMemberBinding="{Binding Set.Jahr}" />
+                    <GridViewColumn Header="Jahr" Width="50" DisplayMemberBinding="{Binding Set.Jahr}" />
 
                     <GridViewColumn Header="Anzahl" Width="60">
                         <GridViewColumn.CellTemplate>
@@ -45,6 +45,14 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding Set.PreisUVP}" Width="70"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Notizen" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Notizen}" Width="70"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
