@@ -42,6 +42,16 @@
                         Cursor="Hand"
                         Click="BtnStatistik_Click"/>
             </WrapPanel>
+            <TextBlock Text="Zuletzt hinzugefügt:" FontWeight="Bold" Margin="0 20 0 5"/>
+            <ListBox x:Name="lstLetzteSets" Height="100">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Set.Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
         </StackPanel>
+        
     </Grid>
 </Page>

@@ -12,9 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Controls;
 using Lego_Set_Verwaltungssytem.Data;
 using Lego_Set_Verwaltungssytem.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lego_Set_Verwaltungssytem.Views
 {
@@ -34,8 +34,24 @@ namespace Lego_Set_Verwaltungssytem.Views
             if (name != "Gast")
             {
                 using var db = new AppDbContext();
-                int anzahl = db.BenutzerSets.Count(bs => bs.Benutzer.Benutzername == name);
-                txtSammlungsInfo.Text = $"Du hast aktuell {anzahl} Sets in deiner Sammlung.";
+                var benutzer = db.Benutzer.FirstOrDefault(b => b.Benutzername == name);
+
+                if (benutzer != null)
+                {
+                    int anzahl = db.BenutzerSets.Count(bs => bs.BenutzerId == benutzer.BenutzerId);
+                    txtSammlungsInfo.Text = $"Du hast aktuell {anzahl} Sets in deiner Sammlung.";
+
+                    // 🔄 Letzte Sets laden
+                    var letzte = db.BenutzerSets
+                            .Include(bs => bs.Set)
+                            .Where(bs => bs.BenutzerId == benutzer.BenutzerId)
+                            .OrderByDescending(bs => bs.Kaufdatum)
+                            .Take(5)
+                            .ToList();
+
+
+                    lstLetzteSets.ItemsSource = letzte;
+                }
             }
 
             txtLizenzInfo.Text = string.IsNullOrWhiteSpace(RebrickableService.ApiKey)
