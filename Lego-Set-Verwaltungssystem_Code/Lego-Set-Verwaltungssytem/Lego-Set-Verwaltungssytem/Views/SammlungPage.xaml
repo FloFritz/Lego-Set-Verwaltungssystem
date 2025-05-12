@@ -35,7 +35,7 @@
                     <GridViewColumn Header="Gezahlter Preis" Width="90">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding GezahlterPreis}" Width="70"/>
+                                <TextBox Text="{Binding GezahlterPreis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="70"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -44,7 +44,7 @@
                     <GridViewColumn Header="UVP (€)" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Set.PreisUVP}" Width="70"/>
+                                <TextBox Text="{Binding Set.PreisUVP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="70"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -52,7 +52,7 @@
                     <GridViewColumn Header="Notizen" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Notizen}" Width="70"/>
+                                <TextBox Text="{Binding Notizen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="70"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

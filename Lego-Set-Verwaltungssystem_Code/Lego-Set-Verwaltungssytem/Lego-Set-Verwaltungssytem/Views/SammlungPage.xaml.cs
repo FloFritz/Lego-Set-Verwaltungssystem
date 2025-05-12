@@ -38,8 +38,8 @@ namespace Lego_Set_Verwaltungssytem.Views
                 {
                     // Lade alle BenutzerSets für den eingeloggten Benutzer inklusive zugehörigem Set (mit PreisUVP etc.)
                     benutzerSets = db.BenutzerSets
-                        .Include(bs => bs.Set)
                         .Where(bs => bs.BenutzerId == benutzerId)
+                        .Include(bs => bs.Set)
                         .ToList();
                 }
 
@@ -59,31 +59,34 @@ namespace Lego_Set_Verwaltungssytem.Views
         {
             if (sender is Button btn && btn.Tag is BenutzerSet selected)
             {
-                using (var db = new AppDbContext())
+                if (App.Current.Properties["BenutzerId"] is int benutzerId)
                 {
-                    // Hole das BenutzerSet mit zugehörigem Set
-                    var eintrag = db.BenutzerSets
-                        .FirstOrDefault(b => b.BenutzerSetId == selected.BenutzerSetId);
-
-                    var legoSet = db.Sets
-                        .FirstOrDefault(s => s.SetId == selected.SetId);
-
-                    if (eintrag != null && legoSet != null)
+                    using (var db = new AppDbContext())
                     {
-                        // BenutzerSet aktualisieren
-                        eintrag.Anzahl = selected.Anzahl;
-                        eintrag.GezahlterPreis = selected.GezahlterPreis;
-                        eintrag.Notizen = selected.Notizen;
+                        var eintrag = db.BenutzerSets
+                            .Include(bs => bs.Set)
+                            .FirstOrDefault(b => b.BenutzerSetId == selected.BenutzerSetId && b.BenutzerId == benutzerId);
 
-                        // PreisUVP vom Set aktualisieren
-                        legoSet.PreisUVP = selected.Set.PreisUVP;
+                        if (eintrag != null)
+                        {
+                            eintrag.Anzahl = selected.Anzahl;
+                            eintrag.GezahlterPreis = selected.GezahlterPreis;
+                            eintrag.Notizen = selected.Notizen;
 
-                        db.SaveChanges();
-                        MessageBox.Show("Änderungen gespeichert.");
+                            if (eintrag.Set != null && selected.Set != null)
+                            {
+                                eintrag.Set.PreisUVP = selected.Set.PreisUVP;
+                            }
+
+                            db.SaveChanges();
+                            MessageBox.Show("Änderungen gespeichert.");
+                            LadeSammlung();
+                        }
                     }
                 }
             }
         }
+
 
 
         // Löscht einen Eintrag aus der Sammlung
