@@ -41,6 +41,16 @@
                         Foreground="White"
                         Cursor="Hand"
                         Click="BtnStatistik_Click"/>
+
+                <Button Content="🔑 API-Key ändern"
+                        Width="180" Height="50"
+                        FontSize="14"
+                        Margin="10"
+                        Background="#bf7b28"
+                        Foreground="White"
+                        Cursor="Hand"
+                        Click="BtnApiKeyAendern_Click"/>
+
             </WrapPanel>
             <TextBlock Text="Zuletzt hinzugefügt:" FontWeight="Bold" Margin="0 20 0 5"/>
             <ListBox x:Name="lstLetzteSets" Height="100">

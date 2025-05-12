@@ -67,6 +67,18 @@ namespace Lego_Set_Verwaltungssytem.Views
 
         private void BtnStatistik_Click(object sender, RoutedEventArgs e) =>
             NavigationService.Navigate(new StatistikenPage());
+
+        private void BtnApiKeyAendern_Click(object sender, RoutedEventArgs e)
+        {
+            var keyWindow = new ApiKeyWindow();
+            var result = keyWindow.ShowDialog();
+
+            if (result == true)
+            {
+                MessageBox.Show("API-Key wurde erfolgreich geändert. \n Bitte einmal Neustarten", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
     }
 
 }
