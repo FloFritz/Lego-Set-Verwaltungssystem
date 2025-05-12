@@ -16,6 +16,7 @@
 
             <WrapPanel HorizontalAlignment="Center" Margin="0 20 0 0">
                 <Button Content="📦 Sammlung anzeigen"
+                        Name="btnSammlung"
                         Width="180" Height="50"
                         FontSize="14"
                         Margin="10"
@@ -25,6 +26,7 @@
                         Click="BtnSammlung_Click"/>
 
                 <Button Content="🔍 Set suchen"
+                        Name="btnSuche"
                         Width="180" Height="50"
                         FontSize="14"
                         Margin="10"
@@ -34,6 +36,7 @@
                         Click="BtnSuche_Click"/>
 
                 <Button Content="📊 Statistiken"
+                        Name="btnStatistik"
                         Width="180" Height="50"
                         FontSize="14"
                         Margin="10"

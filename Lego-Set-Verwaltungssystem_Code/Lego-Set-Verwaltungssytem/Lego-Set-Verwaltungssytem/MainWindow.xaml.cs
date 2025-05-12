@@ -94,6 +94,9 @@ namespace Lego_Set_Verwaltungssytem
                 btnLogout.Visibility = Visibility.Visible;
 
                 MessageBox.Show($"Willkommen, {name}!");
+                MainFrame.Navigate(new HomePage());
+
+
             }
         }
 
@@ -112,5 +115,15 @@ namespace Lego_Set_Verwaltungssytem
             MessageBox.Show("Du wurdest erfolgreich abgemeldet.");
             MainFrame.Navigate(new HomePage());
         }
+
+        public void AktualisiereApiZugriffButtons()
+        {
+            bool gueltig = !string.IsNullOrWhiteSpace(RebrickableService.ApiKey);
+
+            btnSammlung.IsEnabled = gueltig;
+            btnSetSuche.IsEnabled = gueltig;
+            btnStatistiken.IsEnabled = gueltig;
+        }
+
     }
 }

@@ -23,7 +23,17 @@ namespace Lego_Set_Verwaltungssytem.Views
         public HomePage()
         {
             InitializeComponent();
+            PruefeApiZugang();
             LadeInfos();
+        }
+
+        private void PruefeApiZugang()
+        {
+            bool gueltig = !string.IsNullOrWhiteSpace(RebrickableService.ApiKey);
+
+            btnSammlung.IsEnabled = gueltig;
+            btnSuche.IsEnabled = gueltig;
+            btnStatistik.IsEnabled = gueltig;
         }
 
         private void LadeInfos()
@@ -56,7 +66,7 @@ namespace Lego_Set_Verwaltungssytem.Views
 
             txtLizenzInfo.Text = string.IsNullOrWhiteSpace(RebrickableService.ApiKey)
                 ? "⚠ Kein API-Key gefunden – Suche und Import gesperrt."
-                : "✔ API-Key ist aktiv – alle Funktionen verfügbar.";
+                : "✔ API-Key ist eingegeben";
         }
 
         private void BtnSammlung_Click(object sender, RoutedEventArgs e) =>
@@ -75,9 +85,20 @@ namespace Lego_Set_Verwaltungssytem.Views
 
             if (result == true)
             {
-                MessageBox.Show("API-Key wurde erfolgreich geändert. \n Bitte einmal Neustarten", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("API-Key wurde erfolgreich geändert.");
+
+                // Eigene Buttons aktualisieren
+                PruefeApiZugang();
+
+                // Zugriff auf MainWindow und dort Buttons aktivieren
+                if (Application.Current.MainWindow is MainWindow main)
+                {
+                    main.AktualisiereApiZugriffButtons();
+                }
             }
         }
+
+
 
     }
 
