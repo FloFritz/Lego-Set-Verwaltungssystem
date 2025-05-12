@@ -27,7 +27,12 @@ namespace Lego_Set_Verwaltungssytem.Data
                 .HasKey(x => x.SetId); // <<<< Hier explizit sagen: SetId ist der Primärschlüssel
 
             modelBuilder.Entity<BenutzerSet>()
-                .HasKey(bs => new { bs.BenutzerId, bs.SetId });
+                 .HasKey(bs => bs.BenutzerSetId);
+
+            modelBuilder.Entity<BenutzerSet>()
+                .Property(bs => bs.BenutzerSetId)
+                .ValueGeneratedOnAdd();  // <-- AutoIncrement aktivieren
+
 
             modelBuilder.Entity<BenutzerSet>()
                 .HasOne(bs => bs.Benutzer)

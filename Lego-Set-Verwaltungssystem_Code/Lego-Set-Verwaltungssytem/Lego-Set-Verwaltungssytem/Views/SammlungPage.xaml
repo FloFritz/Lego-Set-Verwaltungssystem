@@ -27,7 +27,7 @@
                     <GridViewColumn Header="Anzahl" Width="60">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Anzahl}" Width="50"/>
+                                <TextBox Text="{Binding Anzahl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -40,7 +40,6 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <!-- UVP Spalte -->
                     <GridViewColumn Header="UVP (€)" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -57,13 +56,17 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-
                     <GridViewColumn Header="Aktionen" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Speichern" Click="BtnSpeichern_Click" Margin="0 0 5 0" Tag="{Binding}"/>
-                                    <Button Content="Löschen" Click="BtnLoeschen_Click" Tag="{Binding}"/>
+                                    <Button Content="Speichern"
+                                    Click="BtnSpeichern_Click"
+                                    Margin="0 0 5 0"
+                                    CommandParameter="{Binding}" />
+                                    <Button Content="Löschen"
+                                    Click="BtnLoeschen_Click"
+                                    CommandParameter="{Binding}" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -71,6 +74,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
 
         <Button Content="Set manuell hinzufügen"
                 Background="Black"

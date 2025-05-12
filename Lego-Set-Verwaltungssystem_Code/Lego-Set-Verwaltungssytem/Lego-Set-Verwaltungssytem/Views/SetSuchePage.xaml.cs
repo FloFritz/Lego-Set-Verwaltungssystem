@@ -219,6 +219,11 @@ namespace Lego_Set_Verwaltungssytem.Views
                             vorhandenesBenutzerSet.Anzahl += anzahl;
                         }
 
+                        if (setInDb.PreisUVP == 0.0)
+                        {
+                            MessageBox.Show("Für dieses Set konnte kein UVP gefunden werden. Bitte trage den UVP manuell nach.", "Hinweis", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+
                         db.SaveChanges();
                         MessageBox.Show($"Set {setInDb.Name} wurde deiner Sammlung hinzugefügt!");
                     }

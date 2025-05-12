@@ -57,62 +57,81 @@ namespace Lego_Set_Verwaltungssytem.Views
         // Speichert Änderungen an Anzahl, Preis oder Notizen
         private void BtnSpeichern_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is BenutzerSet selected)
+            if (sender is Button btn && btn.CommandParameter is BenutzerSet selected)
             {
+                Console.WriteLine($"DEBUG: Speichern für ID={selected.BenutzerSetId}, Preis={selected.GezahlterPreis}");
+
                 if (App.Current.Properties["BenutzerId"] is int benutzerId)
                 {
                     using (var db = new AppDbContext())
                     {
+                        // BenutzerSet inkl. Set laden
                         var eintrag = db.BenutzerSets
                             .Include(bs => bs.Set)
-                            .FirstOrDefault(b => b.BenutzerSetId == selected.BenutzerSetId && b.BenutzerId == benutzerId);
+                            .FirstOrDefault(x => x.BenutzerSetId == selected.BenutzerSetId && x.BenutzerId == benutzerId);
 
                         if (eintrag != null)
                         {
-                            eintrag.Anzahl = selected.Anzahl;
+                            // BenutzerSet-Daten übernehmen
                             eintrag.GezahlterPreis = selected.GezahlterPreis;
+                            eintrag.Anzahl = selected.Anzahl;
                             eintrag.Notizen = selected.Notizen;
 
-                            if (eintrag.Set != null && selected.Set != null)
-                            {
-                                eintrag.Set.PreisUVP = selected.Set.PreisUVP;
-                            }
+                            // Set-Daten (global!)
+                            eintrag.Set.PreisUVP = selected.Set.PreisUVP;
+                            db.Entry(eintrag.Set).State = EntityState.Modified;
 
                             db.SaveChanges();
                             MessageBox.Show("Änderungen gespeichert.");
                             LadeSammlung();
                         }
+                        else
+                        {
+                            MessageBox.Show("Eintrag nicht gefunden oder gehört nicht dir.");
+                        }
                     }
                 }
             }
         }
+
+
+
+
+
+
 
 
 
         // Löscht einen Eintrag aus der Sammlung
         private void BtnLoeschen_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is BenutzerSet selected)
+            if (sender is Button btn && btn.CommandParameter is BenutzerSet selected)
             {
-                var result = MessageBox.Show("Willst du dieses Set wirklich aus deiner Sammlung löschen?", "Löschen bestätigen", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
+                if (App.Current.Properties["BenutzerId"] is int benutzerId)
                 {
                     using (var db = new AppDbContext())
                     {
-                        var eintrag = db.BenutzerSets.FirstOrDefault(b => b.BenutzerSetId == selected.BenutzerSetId);
+                        var eintrag = db.BenutzerSets
+                            .FirstOrDefault(x => x.BenutzerSetId == selected.BenutzerSetId && x.BenutzerId == benutzerId);
+
                         if (eintrag != null)
                         {
                             db.BenutzerSets.Remove(eintrag);
                             db.SaveChanges();
-                            MessageBox.Show("Set wurde gelöscht.");
+                            MessageBox.Show("Set gelöscht.");
+                            LadeSammlung();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Dieses Set gehört dir nicht.");
                         }
                     }
-
-                    // Ansicht aktualisieren
-                    LadeSammlung();
                 }
             }
         }
+
+
+
 
 
         private void BtnSetManuellHinzufuegen_Click(object sender, RoutedEventArgs e)
