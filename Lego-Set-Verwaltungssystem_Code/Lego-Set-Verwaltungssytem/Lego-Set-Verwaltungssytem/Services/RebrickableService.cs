@@ -16,7 +16,21 @@ namespace Lego_Set_Verwaltungssytem.Services
     {
         // API-Zugangsdaten
         // Statt static readonly nur so:
-        public static string ApiKey => LadeApiKey();
+        private static string _apiKey;
+
+        public static string ApiKey
+        {
+            get
+            {
+                if (_apiKey == null)
+                    _apiKey = LadeApiKey();
+                return _apiKey;
+            }
+            set
+            {
+                _apiKey = value;
+            }
+        }
 
         private static string LadeApiKey()
         {
@@ -24,24 +38,22 @@ namespace Lego_Set_Verwaltungssytem.Services
             return File.Exists(path) ? File.ReadAllText(path).Trim() : null;
         }
 
-        
-
-        private static readonly HttpClient client = new HttpClient();
+        // HttpClient wird einmalig erzeugt (Header dynamisch gesetzt)
+        private static readonly HttpClient client = new HttpClient
+        {
+            BaseAddress = new Uri("https://rebrickable.com/api/v3/lego/")
+        };
 
         // Mapping von Theme-IDs zu Namen
         private static Dictionary<int, string> themeMapping = new Dictionary<int, string>();
-
-        // HttpClient wird einmalig konfiguriert
-        static RebrickableService()
-        {
-            client.BaseAddress = new Uri("https://rebrickable.com/api/v3/lego/");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", ApiKey);
-        }
 
         // Suche nach Sets über die Freitextsuche
         public static async Task<List<LegoSet>> SucheSetsAsync(string suchbegriff, string suchtyp)
         {
             var sets = new List<LegoSet>();
+
+            // API-Key Header setzen
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", ApiKey);
 
             if (themeMapping.Count == 0)
             {
@@ -75,7 +87,8 @@ namespace Lego_Set_Verwaltungssytem.Services
             }
             else
             {
-                throw new Exception("API Anfrage fehlgeschlagen.");
+                var fehler = await response.Content.ReadAsStringAsync();
+                throw new Exception($"API Anfrage fehlgeschlagen. Code: {response.StatusCode}, Inhalt: {fehler}");
             }
 
             return sets;
@@ -84,6 +97,8 @@ namespace Lego_Set_Verwaltungssytem.Services
         // Lädt den UVP-Preis für ein bestimmtes Set
         public static async Task<double> LadePreisVonSetAsync(string setNummer)
         {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", ApiKey);
+
             string query = $"sets/{setNummer}/";
             HttpResponseMessage response = await client.GetAsync(query);
 
@@ -118,6 +133,7 @@ namespace Lego_Set_Verwaltungssytem.Services
             while (true)
             {
                 string url = $"themes/?page={page}&page_size={pageSize}";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", ApiKey);
                 HttpResponseMessage response = await client.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
@@ -154,6 +170,7 @@ namespace Lego_Set_Verwaltungssytem.Services
             while (true)
             {
                 string url = $"themes/?page={page}&page_size={pageSize}";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", ApiKey);
                 HttpResponseMessage response = await client.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
@@ -198,6 +215,7 @@ namespace Lego_Set_Verwaltungssytem.Services
             while (true)
             {
                 string query = $"sets/?theme_id={themaId}&page={page}&page_size=100";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", ApiKey);
                 HttpResponseMessage response = await client.GetAsync(query);
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -292,4 +310,3 @@ namespace Lego_Set_Verwaltungssytem.Services
         public int? parent_id { get; set; }
     }
 }
-

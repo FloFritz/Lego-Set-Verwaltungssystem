@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using System.Windows;
+using Lego_Set_Verwaltungssytem.Services;
 
 
 namespace Lego_Set_Verwaltungssytem.Views
@@ -24,7 +25,7 @@ namespace Lego_Set_Verwaltungssytem.Views
     {
 
         private const string ApiKeyPfad = "api.txt";
-
+        
 
         public ApiKeyWindow()
         {
@@ -46,9 +47,14 @@ namespace Lego_Set_Verwaltungssytem.Views
             }
 
             File.WriteAllText(ApiKeyPfad, key);
+            // Direkt danach den Key zwischenspeichern, damit er nicht erst beim nächsten Aufruf funktioniert
+            RebrickableService.ApiKey = key;
+
+
             MessageBox.Show("API-Key gespeichert.");
             this.DialogResult = true;
             this.Close();
         }
+
     }
 }
