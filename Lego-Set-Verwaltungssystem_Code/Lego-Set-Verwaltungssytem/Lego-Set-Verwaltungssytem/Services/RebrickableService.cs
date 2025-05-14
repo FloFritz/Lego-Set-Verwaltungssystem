@@ -7,6 +7,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Lego_Set_Verwaltungssytem.Models;
 using System.IO;
+using Lego_Set_Verwaltungssytem.Data;
+using System.Windows;
 
 
 // Enthält alle Methoden für den Zugriff auf die Rebrickable API
@@ -51,6 +53,17 @@ namespace Lego_Set_Verwaltungssytem.Services
         public static async Task<List<LegoSet>> SucheSetsAsync(string suchbegriff, string suchtyp)
         {
             var sets = new List<LegoSet>();
+
+            if (IstOffline())
+            {
+                MessageBox.Show("Keine Internetverbindung. Es wird nur lokal nach Sets gesucht.");
+
+                // Nur aus lokaler DB suchen
+                using var db = new AppDbContext();
+                return db.Sets
+                         .Where(s => s.Name.Contains(suchbegriff) || s.Thema.Contains(suchbegriff) || s.Nummer.Contains(suchbegriff))
+                         .ToList();
+            }
 
             // API-Key Header setzen
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("key", ApiKey);
@@ -278,6 +291,21 @@ namespace Lego_Set_Verwaltungssytem.Services
 
             return null;
         }
+
+        private static bool IstOffline()
+        {
+            try
+            {
+                using var client = new HttpClient();
+                var result = client.GetAsync("https://rebrickable.com").Result;
+                return !result.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return true;
+            }
+        }
+
     }
 
     // Datenmodell für Setliste aus API
